@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block content %}
+<main role="main" class="container my-5">
+	<div class="d-flex align-items-center p-3 bg-purple rounded-top box-shadow">
+		<h6 class="mb-0 text-white">{{current_category.name}} <span class="badge badge-pill bg-info my-auto">{{items | length}}</span></h6>
+	</div>
+	<div class="p-3 bg-white rounded-bottom box-shadow">
+		{% for item in items %}
+		<div class="media text-muted pb-3">
+			<p class="media-body pb-3 mb-0 border-bottom border-gray">
+				<a href="{{ url_for('show_description', item_id=item.id,category_id=current_category.id) }}"><span class="text-primary">{{item.name}}</span></a>
+			</p>
+		</div>
+		{% endfor %}
+	</div>
+</main>
+{% endblock %}

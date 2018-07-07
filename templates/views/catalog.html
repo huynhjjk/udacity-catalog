@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block content %}
+<main role="main" class="container my-5">
+	<div class="d-flex align-items-center p-3 bg-purple rounded-top box-shadow">
+		<h6 class="mb-0 text-white">Recent Items</h6>
+		{% if is_logged_in %}
+		<a href="{{ url_for('add_item') }}" class="btn btn-sm btn-light ml-auto">Add Item</a>
+		{% endif %}
+	</div>
+	<div class="p-3 bg-white rounded-bottom box-shadow">
+		{% for item in latest_items %}
+		<div class="media text-muted pb-3">
+			<p class="media-body pb-3 mb-0 border-bottom border-gray">
+				<span class="d-block">
+					<a class="text-secondary" href="{{ url_for('show_items', category_id=item.category.id) }}">{{item.category.name}}</a>
+				</span>
+				<a href="{{ url_for('show_description', category_id=item.category_id, item_id=item.id) }}"><span class="text-primary">{{item.name}}</span></a>		
+			</p>
+		</div>
+		{% endfor %}
+	</div>
+</main>
+{% endblock %}

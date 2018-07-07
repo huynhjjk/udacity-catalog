@@ -1,0 +1,22 @@
+<header>
+    <div class="navbar navbar-dark bg-purple box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <strong>Catalog</strong>
+            </a>
+            {% if 'username' not in session %}
+                <a class="btn btn-info" href="{{url_for('show_login')}}">Login</a>
+            {% else %}
+                <a class="btn btn-info" href="{{url_for('gdisconnect')}}">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+	<div class="bg-white box-shadow">
+        <nav class="nav nav-underline container">
+            <a href="/" class="nav-link active text-dark"><strong>Categories</strong></a>
+            {% for category in categories %}
+            <a class="nav-link" href="{{ url_for('show_items', category_id=category.id) }}">{{category.name}}</a>
+            {% endfor %}
+        </nav>
+    </div>
+</header>

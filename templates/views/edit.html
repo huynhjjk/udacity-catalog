@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block content %}
+<form action="#", method="post" enctype="multipart/form-data">
+	<main role="main" class="container my-5">
+		<div class="d-flex align-items-center p-3 bg-purple rounded-top box-shadow">
+			<h6 class="mb-0 text-white">Edit</h6>
+			<div class="dropdown ml-auto align-self-center">
+				<select name="category" class="btn btn-sm btn-info dropdown-toggle"
+					type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" required>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						{% for category in categories %}
+							<option class="dropdown-item" value="{{category.id}}"
+							{% if category.id == edited_item.category_id %} selected {% endif %}>{{category.name}}</option>
+						{% endfor %}
+					</div>
+				</select>
+			</div>
+		</div>
+		<div class="p-3 bg-white rounded-bottom box-shadow">
+			<div>
+				<label for="name" for="title" class="h5 mb-3" >Title</label>
+				<input name="name" type="text" id="title" class="form-control mb-3" placeholder="Title" value="{{edited_item.name}}" required>
+			</div>
+			<div>
+				<label for="description" class="h5 mb-3">Description</label>
+				<textarea name="description" id="description" class="form-control mb-3" rows="10" placeholder="Description" required>{{edited_item.description}}</textarea>
+			</div>
+			<div>
+				<a class="btn btn-sm btn-outline-dark" href="{{ url_for('show_description', category_id=edited_item.category_id, item_id=edited_item.id) }}">Cancel</a>
+				<button class="btn btn-sm btn-info">Submit</button>
+			</div>	
+		</div>
+	</main>
+</form>
+{% endblock %}

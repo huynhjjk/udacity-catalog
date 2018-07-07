@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<main role="main" class="container my-5">
+	<div class="d-flex align-items-center p-3 bg-purple rounded-top box-shadow">
+		<h6 class="mb-0 text-white">Delete</h6>
+	</div>
+	<div class="p-3 bg-white rounded-bottom box-shadow">
+		<p>Are you sure you want to delete {{item_to_delete.name}}?</p>
+		<a class="btn btn-sm btn-info" href="{{ url_for('show_description', category_id=item_to_delete.category_id, item_id=item_to_delete.id) }}">No</a>
+		<form class="d-inline" action="#", method="post">
+			<button type="submit" class="btn btn-sm btn-danger">Yes</button>
+		</form>
+	</div>
+</main>
+{% endblock %}
