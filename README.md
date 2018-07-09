@@ -20,10 +20,11 @@ The Virtual Machine configuration will be provided by Udacity. It will contain t
 2. Open the terminal and **cd** into the **fullstack-nanodegree-vm/vagrant** directory.<br>
 3. Enter the command **vagrant up** to run vagrant<br>
 4. Enter the command **vagrant ssh** to login into the VM<br>
-5. Enter the command **python database_setup.py** to setup your database<br>
-6. Enter the command **python load_database.py** to load pre-populated data onto your database.<br>
-7. Enter the command **python application.py** to run your server.<br>
-8. Open your web browser and visit the url: [http://localhost:5000/](http://localhost:5000/).<br>
+5. **cd** into the **fullstack-nanodegree-vm/vagrant/catalog** directory.
+6. Enter the command **python database_setup.py** to setup your database<br>
+7. Enter the command **python load_database.py** to load pre-populated data onto your database.<br>
+8. Enter the command **python application.py** to run your server.<br>
+9. Open your web browser and visit the url: [http://localhost:5000/](http://localhost:5000/).<br>
 
 ## Authors
 - Code contributed by Johnson Huynh
