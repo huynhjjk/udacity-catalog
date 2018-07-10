@@ -94,7 +94,8 @@ def show_login():
     categories = session.query(Category).all()
 
     # return "The current session state is %s" % login_session['state']
-    return render_template('views/login.html', STATE=state, categories=categories)
+    return render_template(
+        'views/login.html', STATE=state, categories=categories)
 
 
 @app.route('/gconnect', methods=['POST'])
