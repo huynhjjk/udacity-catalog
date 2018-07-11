@@ -83,5 +83,6 @@ class Item(Base):
             'updated_date': self.updated_date
         }
 
+
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)

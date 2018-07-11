@@ -5,6 +5,7 @@ import httplib2
 import requests
 import json
 
+from functools import wraps
 from flask import Flask, render_template, request, redirect, jsonify, url_for,\
     session as login_session, make_response, flash, make_response
 from sqlalchemy import create_engine
@@ -23,6 +24,23 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        """Redirect user if not registered.
+
+        Returns:
+            function decorator or redirect to login
+            if user not registered.
+        """
+        if 'user_id' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not allowed to access there')
+            return redirect('/login')
+    return decorated_function
 
 
 @app.route('/catalog.json')
@@ -296,6 +314,7 @@ def show_description(category_id, item_id):
 
 
 @app.route('/catalog/add', methods=['POST', 'GET'])
+@login_required
 def add_item():
     """Add an item.
 
@@ -303,9 +322,6 @@ def add_item():
         GET: add an item page - add.html.
         POST: redirect to item details page for item added.
     """
-    if not is_logged_in():
-        return redirect(url_for('show_login'))
-
     if request.method == 'POST':
         # extract input values from form and add new item to database
         new_item = Item(
@@ -328,6 +344,7 @@ def add_item():
 
 
 @app.route('/catalog/<int:item_id>/edit', methods=['POST', 'GET'])
+@login_required
 def edit_item(item_id):
     """Edit an item.
 
@@ -338,9 +355,14 @@ def edit_item(item_id):
         GET: edit item page - edit.html.
         POST: redirect to item details page for edited item.
     """
-    if not is_logged_in():
-        return redirect(url_for('show_login'))
     edited_item = session.query(Item).filter_by(id=item_id).one()
+    # Redirect user back to item description page if user_id does not match
+    if login_session['user_id'] != edited_item.user_id:
+        return redirect(
+            url_for(
+                'show_description',
+                category_id=edited_item.category_id,
+                item_id=edited_item.id))
 
     if request.method == 'POST':
         # extract input values from form and update item in database
@@ -368,6 +390,7 @@ def edit_item(item_id):
 
 
 @app.route('/catalog/<int:item_id>/delete', methods=['POST', 'GET'])
+@login_required
 def delete_item(item_id):
     """delete an item.
 
@@ -378,12 +401,17 @@ def delete_item(item_id):
         GET: delete an item page - delete.html.
         POST: redirect to show items for a category page.
     """
-    if not is_logged_in():
-        return redirect(url_for('show_login'))
-
     item_to_delete = session.query(Item).filter_by(id=item_id).one()
     category_id = item_to_delete.category_id
     categories = session.query(Category).all()
+
+    # Redirect user back to item description page if user_id does not match
+    if login_session['user_id'] != item_to_delete.user_id:
+        return redirect(
+            url_for(
+                'show_description',
+                category_id=item_to_delete.category_id,
+                item_id=item_to_delete.id))
 
     if request.method == 'POST':
         # Delete item from database and redirect to previous category
@@ -455,6 +483,7 @@ def is_logged_in():
         boolean flag if user id in session.
     """
     return 'user_id' in login_session
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
